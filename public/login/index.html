@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login here</title>
+</head>
+<style>
+    input{
+        font-size: 1.1rem;
+        border-radius: 21px;
+        border-style: none;
+        padding: 5px;
+        margin-top: 7px;
+    }
+    input:hover{
+        border-style: none;
+    }
+   body{
+    /* position: absolute; */
+        background-repeat: no-repeat;
+        background-size:auto;
+        background-position: center;
+        /* background-image: linear-gradient(rgb(14, 147, 103) , rgb(11, 98, 63)); */
+        padding:50px;
+    }
+    form{
+        padding: 21px;
+        display: block;
+        justify-content: space-around;
+        width: max-content;
+        font-size: 1.5rem;
+        font-style: cursive;
+        margin: auto;
+        
+        border-radius: 30px;
+        color: rgb(247, 235, 168);
+        background-color: rgb(21, 30, 48);
+       
+        top:0;left: 0;right: 0;bottom: 0;
+    }
+    button{
+        cursor: pointer;
+        font-size: 1.1rem;
+        margin-top:12px ;
+        background-color: rgb(51, 137, 150);
+        border-radius: 12px;
+        padding: 8px;
+        color: whitesmoke;
+        border-style: none;
+    }
+    button:hover{
+        background-color: rgb(7, 91, 63);
+    }
+</style>
+
+<body>
+    <form >
+        <center><h2>Log in</h2></center>
+        
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text">
+        <br>
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password">
+        <br>
+        <button id="submit" type="submit">Login</button>
+        <b><h4 id="msg">hello</h4></b>
+    </form>
+    <script >
+        const button = document.getElementById('submit');
+        const    msg = document.getElementById('msg');
+
+        button.addEventListener('click',async  (event)=>{
+   
+       const username  =  document.getElementById('username').value;
+       const pwd = document.getElementById('password').value;
+       const data = {
+        username : username,
+        password : pwd
+       };
+       console.log(data);
+       event.preventDefault();
+       fetch(`/user/cred`,{
+        method : 'POST',
+        headers : {
+            'Content-type' : 'application/json'
+        },
+        body : JSON.stringify(data)
+       })
+      .then((res) => res.json())
+      .then((obj) => console.log('success',obj))
+      .catch((err) => console.log('failure',err));
+     
+         
+}
+) 
+    
+    </script>
+</body>
+</html>

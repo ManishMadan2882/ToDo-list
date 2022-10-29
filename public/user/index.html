@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User portal</title>
+    <style>
+        body{
+            background-image: linear-gradient(to right, rgb(23, 148, 167), rgb(100, 170, 213));
+        }
+        .center {
+            align-items: center;
+            display: flex;
+            justify-content: center;
+                
+            }
+    #submit{
+     margin-top: 100px;
+     border-radius:36px ;
+     border-style: none;    
+     padding:7px 17px;
+     background-color: aquamarine;
+     font-size: 1rem;
+     
+    }
+    #submit:hover{
+        cursor: pointer;
+        background-color: aqua;
+    }        
+    #new-entry{
+        padding: 10px 10px 10px 10px;
+        display: block;
+        border: none;
+        border-radius: 25px;
+    }
+    span{
+        display: inline;
+        width: 90%;
+        border-style: none;
+        background-color: rgb(196, 239, 244);
+        list-style-type: none;
+        padding: 10px;
+        border-radius: 32px;
+    }
+    span:hover{
+        background-color: rgb(39, 39, 85);
+        color: aliceblue;
+    }
+    li{
+        list-style-type: none;
+
+    }
+    .btn{
+        border-style: none;
+        background-color: rgb(221, 168, 166);
+        padding: 8px;
+        cursor: pointer;
+        margin-left: 12px;
+        border-radius: 30px;
+        
+    }
+    .btn:hover{
+        color: aliceblue;
+        background-color: rgb(169, 35, 35);
+    }
+    </style>
+</head>
+<body>
+    <center><h1>username</h1></center>
+    <div class="center" id="new">
+        <textarea class="center" name="" id="new-entry" cols="40" rows="3"></textarea>
+        <button id="submit" type="submit">+</button>
+    </div>
+    <div>
+        <ul id="data">
+            <li>
+                <span>
+                    have breakfast honey
+                </span>
+               
+                <button class="btn"> x </button>
+            </li>
+            
+        </ul>
+    </div>
+    <script>
+        function getCookie(cname) {
+     let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+    const token = getCookie('code');
+    data ={
+        token : token
+
+    }
+    if(token.length == 0)
+    location.href = '/user/register' 
+    else
+    {
+        fetch('/api/userdata',{
+            method : "GET",
+            headers : {
+            'Content-type' : 'application/json'
+        },
+        body : JSON.stringify(data)
+        })
+        .then(res => res.json)
+        .then(info => {
+            console.log(info);
+        })
+        .catch(err => console.log(err));
+    }
+    </script>
+</body>
+</html>

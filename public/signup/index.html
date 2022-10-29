@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign-UP here</title>
+</head>
+<style>
+    input{
+        font-size: 1.1rem;
+        border-radius: 21px;
+        border: 2px solid rgb(120, 0, 194);
+        padding: 3px;
+        margin-top: 7px;
+    }
+    body{
+        padding:50px;
+    }
+    form{
+        padding: 21px;
+        display: block;
+        justify-content: space-around;
+        width: max-content;
+        font-size: 1.5rem;
+        font-style: cursive;
+        margin: auto;
+        
+        border-radius: 30px;
+        color: rgb(106, 228, 153);
+        background-color: rgb(87, 62, 111);
+        top:0;left: 0;right: 0;bottom: 0;
+    }
+
+    button{
+        cursor: pointer;
+        font-size: 1.1rem;
+        margin-top:12px ;
+        background-color: rgb(13, 164, 187);
+        border-radius: 12px;
+        padding: 8px;
+        color: whitesmoke;
+        border-style: none;
+    }
+    button:hover{
+        background-color: rgb(7, 91, 63);
+    }
+</style>
+<body>
+    <form >
+        <center><h2>Sign up</h2></center>
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text">
+        <br>
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password">
+        <br>
+        <label for="password2">Repeat Password</label>
+        <input id="repeated_password" name="password2" type="password">
+        <br>
+        <button id="submit" type="submit">Sign up</button>
+        <b><h4 id="msg">hello</h4></b>
+    </form>
+    
+    <script >
+        const button = document.getElementById('submit');
+const msg = document.getElementById('msg');
+
+button.addEventListener('click',async (event)=>{
+    event.preventDefault();
+    const username  =  document.getElementById('username').value;
+    const pwd = document.getElementById('password').value;
+    const pwd2 = document.getElementById('repeated_password').value; 
+    
+    if(!(pwd === pwd2))
+   { 
+    document.getElementById('msg').innerHTML='password mismatch';
+   }
+    else{
+        document.getElementById('msg').innerHTML='';  
+      const Data = {
+        username : username,
+        password : pwd
+      };
+      console.log(JSON.stringify(Data));
+      await fetch('/user/register',{
+        method:'POST',
+        headers:{
+            'Content-type':'application/json'
+        },
+        body : JSON.stringify(Data),
+        
+      }).then((res) => res.json())
+      .then((data) => {
+        console.log('success',data);
+     
+        })
+      .catch((err) => console.log('failure',err));
+    }
+    
+}
+);
+    
+    </script>
+</body>
+</html>
