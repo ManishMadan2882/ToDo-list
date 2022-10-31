@@ -87,8 +87,8 @@
         const addBtn = document.getElementById('submit')
         const text = document.getElementById("new-entry")
         const rem = document.getElementsByClassName('btn')
-        var arr;
         
+
         function getCookie(cname) {
      let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
@@ -105,8 +105,9 @@
   }
   return "";
 }
+
     var token = getCookie('code');
-   
+    var arr;
      if(token.length == 0)
     location.href = '/user/register' 
     
@@ -121,6 +122,8 @@
         })
         .then(res => res.json())
         .then(info => {
+            window.arr = info.userdata;
+            console.log(info.userdata)
             let index=0;
             document.getElementById('username').innerHTML = info.username;
             for(i in info.userdata)
@@ -132,20 +135,19 @@
            ${info.userdata[i]}             
         </span>
                    
-         <button id="btn${index}" class="btn"> x </button>
+         <button onclick='removeElement(${index})'  id="btn${index}" class="btn"> x </button>
         `;
         document.getElementById('data').appendChild(elem); 
         index++;
         }
               
-        return info.userdata;  
+        return new Array(info.userdata);  
         })
         .catch(err => console.log(err));
     };
-       
-       arr  = userList();
- console.log(arr);
-       
+    userList();
+    
+
 
 const update = async (array) => {
 let object = {
@@ -168,13 +170,18 @@ body : JSON.stringify(object)
 })
 .catch(err => console.log(err));
 } 
-console.log("yaha per "+userList())
+//console.log(arr)
 addBtn.addEventListener('click' , () => {
-    console.log(arr);
-    arr.push(text.value);
+    console.log("arr: "+arr);
+     arr.push(text.value);
     update(arr);
-   document.location.reload();
+   document.location.reload(); 
 });
+function removeElement(index){
+   arr.splice(index,1);
+   update(arr);
+   document.location.reload();
+}
 
     </script>
 </body>
