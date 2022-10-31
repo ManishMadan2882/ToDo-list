@@ -49,7 +49,7 @@
     }
     li{
         list-style-type: none;
-
+        margin-bottom: 20px;
     }
     .btn{
         border-style: none;
@@ -64,27 +64,31 @@
         color: aliceblue;
         background-color: rgb(169, 35, 35);
     }
+    h1{
+        color: aliceblue;
+        border-radius: 25px;
+        border: 2px solid rgb(139, 181, 187);
+    }
     </style>
 </head>
 <body>
-    <center><h1>username</h1></center>
+    <center><h1 id="username"></h1></center>
     <div class="center" id="new">
         <textarea class="center" name="" id="new-entry" cols="40" rows="3"></textarea>
         <button id="submit" type="submit">+</button>
     </div>
     <div>
         <ul id="data">
-            <li>
-                <span>
-                    have breakfast honey
-                </span>
-               
-                <button class="btn"> x </button>
-            </li>
             
         </ul>
     </div>
     <script>
+     
+        const addBtn = document.getElementById('submit')
+        const text = document.getElementById("new-entry")
+        const rem = document.getElementsByClassName('btn')
+        var arr;
+        
         function getCookie(cname) {
      let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
@@ -95,33 +99,83 @@
         c = c.substring(1);
         }
         if (c.indexOf(name) == 0) {
+            console.log(c.substring(name.length, c.length))
         return c.substring(name.length, c.length);
     }
   }
   return "";
 }
-    const token = getCookie('code');
-    data ={
-        token : token
-
-    }
-    if(token.length == 0)
+    var token = getCookie('code');
+   
+     if(token.length == 0)
     location.href = '/user/register' 
-    else
-    {
-        fetch('/api/userdata',{
+    
+     
+    
+       var userList = async () => {
+           return await  fetch('user/api/userdata',{
             method : "GET",
             headers : {
-            'Content-type' : 'application/json'
-        },
-        body : JSON.stringify(data)
+            "x-access-token" : token
+        }
         })
-        .then(res => res.json)
+        .then(res => res.json())
         .then(info => {
-            console.log(info);
+            let index=0;
+            document.getElementById('username').innerHTML = info.username;
+            for(i in info.userdata)
+        {
+        let elem = document.createElement('li');
+        elem.innerHTML=
+        `
+        <span id="li${index}">
+           ${info.userdata[i]}             
+        </span>
+                   
+         <button id="btn${index}" class="btn"> x </button>
+        `;
+        document.getElementById('data').appendChild(elem); 
+        index++;
+        }
+              
+        return info.userdata;  
         })
         .catch(err => console.log(err));
-    }
+    };
+       
+       arr  = userList();
+ console.log(arr);
+       
+
+const update = async (array) => {
+let object = {
+    userdata : array
+};
+console.log(object);
+await  fetch('user/api/userdata',{
+    method : "PATCH",
+    headers : {
+    "Content-type" : "application/json",    
+    "x-access-token" : token
+        },
+body : JSON.stringify(object) 
+})
+.then(res => res.json())
+.then(info => {
+    console.log(info);    
+    console.log('updated');
+     
+})
+.catch(err => console.log(err));
+} 
+console.log("yaha per "+userList())
+addBtn.addEventListener('click' , () => {
+    console.log(arr);
+    arr.push(text.value);
+    update(arr);
+   document.location.reload();
+});
+
     </script>
 </body>
 </html>

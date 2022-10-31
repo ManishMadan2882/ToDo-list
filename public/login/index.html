@@ -90,7 +90,12 @@
         body : JSON.stringify(data)
        })
       .then((res) => res.json())
-      .then((obj) => console.log('success',obj))
+      .then((obj) =>
+       {
+        /* console.log('success',obj); */
+        location.href = '/user';
+        }
+       )
       .catch((err) => console.log('failure',err));
      
          
